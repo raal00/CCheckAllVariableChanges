@@ -1,0 +1,5 @@
+﻿  mainSource.c
+D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(52,41): warning C4013:  malloc: нет определения; предполагается "extern" с возвратом типа "int"
+D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(78,29): warning C4047:  !=: "int" отличается по уровням косвенного обращения от "void *"
+D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(112,28): warning C4047:  ==: "int" отличается по уровням косвенного обращения от "void *"
+  KR_debugC.vcxproj -> D:\Программирование\backend\C\KR_debugC\Debug\KR_debugC.exe
