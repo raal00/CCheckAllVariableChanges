@@ -1,17 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <locale.h>
 
+int getStringLength(char* string);
 
-int main()
+typedef struct TextFormat
 {
-	int value1 = 1;
-	int value2 = 1;
-	int value3 = 1;
+	unsigned char  stringLength;
+	unsigned char  countOfLetters;
+	int   sumOfLetterCodes;
+	unsigned char* string;
 
-	if (1)
-	{
-		value1++;
-	}
-	value2 %= 2;
-	printf("value = %d", value3);
+}Format;
+
+int main(void)
+{
+	int a ;
+	float b;
+	char c;
+	
+	b = 1;
+	a = b * b;
+
+	c  = '1' +
+		 '2' +
+		 '3';
 	return 0;
 }
+

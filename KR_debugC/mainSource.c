@@ -1,12 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <locale.h>
+#include <stdbool.h>
 
 const char* TestCFilePath = "test.c";
 const char* LogFile = "log.txt";
 
-int  GetLineLength(char* line);
-void FindAllVariableChanges(char* line, char** variablesArray, int variablesArrayLenght, int lineNumber);
+int  GetLineLength(char* Line);
+int  VariableContains(char* Line, int LineLength, int StartIndex, char* SubString, int SubStringLength);
+void FindAllVariableChanges(char* Line, char** variablesArray, int variablesArrayLenght, int lineNumber);
 
 int main() 
 {
@@ -61,71 +63,119 @@ int main()
 	printf("3) Начинаем поиск\n");
 
 	CurrentCodeLine = (char*)malloc(sizeof(char) * MaxLineLength);
-	while (fgets(CurrentCodeLine, MaxLineLength, InputFileThread) != NULL)
-	{
-		FindAllVariableChanges(CurrentCodeLine, searchedVariablesArray, searchedVariablesArrayLength, LineNumber);
-		LineNumber++;
-	}
+	bool SearchingOperator = false;
+	int OperatorCount = 0;
 	
+	// Search all variables
+	for (int i = 0; i < searchedVariablesArrayLength; i++)
+	{
+		char* variable = searchedVariablesArray[i];
+		printf("%d) %s\n", i, variable);
+		int	  variableLength = GetLineLength(variable);
+		int LBoard = 0;
+
+		while (fgets(CurrentCodeLine, MaxLineLength, InputFileThread) != NULL)
+		{
+			int index = 0;
+			int lineLength = GetLineLength(CurrentCodeLine);
+
+			while (index < lineLength) 
+			{
+				if (SearchingOperator)
+				{
+					while (1)
+					{
+						if (index == lineLength) break;
+						if (CurrentCodeLine[index] != ' ' && CurrentCodeLine[index] != '\t') printf("%c",CurrentCodeLine[index]);
+						if (CurrentCodeLine[index] == ';')
+						{
+							SearchingOperator = false;
+							printf("%c", '\n');
+							break;
+						}
+						index++;
+					}
+				}
+				if (index == lineLength) break;
+
+				int res = VariableContains(CurrentCodeLine, lineLength, index, variable, variableLength);
+				if (res >= 0)
+				{
+					printf("Operator on line %d: ", LineNumber);
+					index = res + variableLength - 1;
+					SearchingOperator = true;
+				}
+				else { break; }
+			}
+			LineNumber++;
+		}
+
+		rewind(InputFileThread);
+	}
+	printf("Finish");
 	getchar();
 	return 0;
 }
 
 
-int  GetLineLength(char* line)
+int  GetLineLength(char* Line)
 {
 	int index = 0;
-	while ((line[index] != NULL) && (line[index] != '\n') && (line[index] != '\0') )
+	while ((Line[index] != NULL) && (Line[index] != '\n') && (Line[index] != '\0') )
 	{
 		index++;
 	}
 	return index;
 }
 
-void FindAllVariableChanges(char* line, char** variablesArray, int variablesArrayLenght, int lineNumber)
+int VariableContains(char* Line, int LineLength, int SearchFrom, char* SubString, int SubStringLength)
 {
-	int LineLength = GetLineLength(line);
-	int VariableLength;
-	char currentLetter;
+	/// <example>
+	///		> Line: "int   value1 = 1; val=3; float VALue;" SubString: "value"
+	///		< not found
+	/// </example>
 
-	for (int i = 0; i < variablesArrayLenght; i++)
+	char	CurrentLetter;
+	int		LineIndex = 0;
+
+	if (SubStringLength > LineLength - SearchFrom) 
 	{
-		VariableLength = GetLineLength(variablesArray[i]);
-		for (int j = 0; j < LineLength; j++)
+		return -2; 
+	}
+
+	for (int j = SearchFrom; j < LineLength; j++)
+	{
+		CurrentLetter = Line[j];
+		for (int k = 0; k < SubStringLength; k++)
 		{
-			currentLetter = line[j];
-			for (int k = 0; k < VariableLength; k++)
+			// first letter found -> check prev symb 
+			if (CurrentLetter == SubString[k] && (   Line[j - 1] == NULL || Line[j - 1] == ' '
+												  || Line[j - 1] == '\n' || Line[j - 1] == '\t'
+												  || Line[j - 1] == '\0')) 
+																								
 			{
-				if (currentLetter == variablesArray[i][k]) // first founded
+				int firstIndex = j;
+				do
 				{
-					int firstIndex = j;
 					j++;
 					k++;
-					while (line[j] == variablesArray[i][k]) 
+					if (j >= firstIndex + SubStringLength)
 					{
-						j++;
-						k++;
-						if (j == firstIndex + VariableLength)
+						// whole word found -> check next symb
+						if (Line[j + 1] == NULL || Line[j + 1] == '\0' || Line[j + 1] == ' '
+							|| Line[j + 1] == '\n' || Line[j + 1] == '\t' || Line[j + 1] == '='
+							|| Line[j + 1] == '%' || Line[j + 1] == '-' || Line[j + 1] == '/'
+							|| Line[j + 1] == '+' || Line[j + 1] == '*' || Line[j + 1] == ';')
 						{
-							while (line[j] == ' ') 
-							{ 
-								if (line[j] == NULL) break;
-								j++; 
-							}
-							char Operator[2]; 
-							Operator[0] = line[j];
-							Operator[1] = line[j + 1];
-							if ((Operator[0] == '+' && Operator[1] == '=') 
-							|| (Operator[0] == '+' && Operator[1] == '+')
-							|| (Operator[0] == '%' && Operator[1] == '=')
-							|| (Operator[0] == '-' && Operator[1] == '=')
-							|| (Operator[0] == '='))
-								printf("%s Найдено изменение в строке %d оператор <%c%c>\n", variablesArray[i], lineNumber, Operator[0], Operator[1]);
-							break;
+							return firstIndex;
 						}
 					}
-				}
+				} 
+				while (Line[j] == SubString[k]);
+				
 			}
+			else continue;
 		}
 	}
+	return -1;
 }
