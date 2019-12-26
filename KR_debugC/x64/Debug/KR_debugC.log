@@ -1,11 +1,9 @@
-﻿  mainSource.c
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(64,41): warning C4013:  malloc: нет определения; предполагается "extern" с возвратом типа "int"
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(64,88): warning C4312:  приведение типов: преобразование из "int" в "char **" большего размера
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(68,83): warning C4312:  приведение типов: преобразование из "int" в "char *" большего размера
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(75,63): warning C4312:  приведение типов: преобразование из "int" в "char *" большего размера
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(76,60): warning C4312:  приведение типов: преобразование из "int" в "char *" большего размера
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(157,38): warning C4047:  =: "char" отличается по уровням косвенного обращения от "void *"
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(191,29): warning C4047:  !=: "int" отличается по уровням косвенного обращения от "void *"
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(225,65): warning C4047:  ==: "int" отличается по уровням косвенного обращения от "void *"
-D:\Программирование\backend\C\KR_debugC\KR_debugC\mainSource.c(238,31): warning C4047:  ==: "int" отличается по уровням косвенного обращения от "void *"
+﻿  test.c
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(21,4): warning C4552: "+": результат выражения не используется
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(22,27): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(24,25): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(25,19): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(26,25): warning C4047: =: "char *" отличается по уровням косвенного обращения от "int"
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(26,30): warning C4013: sin: нет определения; предполагается "extern" с возвратом типа "int"
+D:\Программирование\backend\C\KR_debugC\KR_debugC\test.c(14,6): warning C4101: g: неиспользованная локальная переменная
   KR_debugC.vcxproj -> D:\Программирование\backend\C\KR_debugC\x64\Debug\KR_debugC.exe

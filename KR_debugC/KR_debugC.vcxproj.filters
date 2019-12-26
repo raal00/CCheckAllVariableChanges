@@ -18,5 +18,8 @@
     <ClCompile Include="mainSource.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="test.c">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
